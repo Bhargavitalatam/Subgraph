@@ -1,9 +1,8 @@
 services:
-  - type: web
+  - type: static
     name: weather-oracle-frontend
-    runtime: node
-    buildCommand: npm install && npm run build
-    staticPublishPath: build
+    buildCommand: cd frontend && npm install && npm run build
+    publishPath: frontend/build
     envVars:
       - key: REACT_APP_WEATHER_ORACLE_ADDRESS
         sync: false
