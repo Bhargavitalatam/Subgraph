@@ -6,6 +6,6 @@ services:
     staticPublishPath: frontend/build
     envVars:
       - key: REACT_APP_WEATHER_ORACLE_ADDRESS
-        sync: false
+        sync: true
       - key: REACT_APP_SUBGRAPH_URI
-        sync: false
+        sync: true

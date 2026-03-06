@@ -144,6 +144,22 @@ contract WeatherOracle is ChainlinkClient, Ownable {
     function setJobId(bytes32 _jobId) public onlyOwner {
         jobId = _jobId;
     }
+
+    /**
+     * @dev Allows owner to simulate a weather report for demo purposes without LINK tokens.
+     */
+    function simulateWeatherReport(string memory _city, int256 _temp, string memory _desc) public onlyOwner {
+        bytes32 mockId = keccak256(abi.encodePacked(_city, block.timestamp));
+        
+        weatherReports[mockId] = WeatherReport({
+            city: _city,
+            temperature: _temp,
+            description: _desc,
+            timestamp: block.timestamp
+        });
+
+        emit WeatherReported(mockId, _city, _temp, _desc, block.timestamp);
+    }
     
     receive() external payable {}
 }

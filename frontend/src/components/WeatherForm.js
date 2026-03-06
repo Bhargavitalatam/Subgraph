@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ethers } from 'ethers';
 
 function WeatherForm({ contract, account }) {
     const [city, setCity] = useState('');
@@ -13,7 +14,7 @@ function WeatherForm({ contract, account }) {
         setStatus('Requesting weather for ' + city + '...');
         try {
             const tx = await contract.requestWeather(city, {
-                value: 0 // In a real scenario, this would be the LINK fee or a payment
+                value: ethers.parseEther(process.env.REACT_APP_WEATHER_ORACLE_FEE || "0.01") // Send required fee (v6 syntax)
             });
             setStatus('Transaction sent: ' + tx.hash);
             await tx.wait();
