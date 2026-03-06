@@ -1,22 +1,34 @@
 const hre = require("hardhat");
-require("dotenv").config();
+const ethers = hre.ethers;
 
 async function main() {
-    const [deployer] = await hre.ethers.getSigners();
-    const linkAddress = "0x7798732310c3e91129c756C230D9cB21016758F4";
+    const WeatherOracle = await ethers.getContractFactory("WeatherOracle");
+    const oracleAddress = "0xfE7FD5081f5B4b3De18882d6d01154AF1aA79114";
+    const oracle = WeatherOracle.attach(oracleAddress);
 
-    // Normalize to checksummed address via lowercasing first
-    const safeLinkAddress = hre.ethers.getAddress(linkAddress.toLowerCase());
+    try {
+        console.log("Checking oracle address:", oracleAddress);
+        const code = await ethers.provider.getCode(oracleAddress);
+        if (code === "0x") {
+            console.log("Contract is NOT deployed at this address.");
+            return;
+        }
 
-    const LinkToken = await hre.ethers.getContractAt([
-        "function balanceOf(address account) external view returns (uint256)"
-    ], safeLinkAddress);
+        const chainlinkToken = await oracle.chainlinkToken();
+        const oracleNode = await oracle.oracle();
+        const jobId = await oracle.jobId();
 
-    const balance = await LinkToken.balanceOf(deployer.address);
-    console.log("Deployer LINK Balance:", hre.ethers.formatEther(balance));
+        console.log("chainlinkToken:", chainlinkToken);
+        console.log("oracle node:", oracleNode);
+        console.log("jobId:", jobId);
+
+        const linkToken = await ethers.getContractAt("@chainlink/contracts/src/v0.8/shared/interfaces/LinkTokenInterface.sol:LinkTokenInterface", chainlinkToken);
+        const balance = await linkToken.balanceOf(oracleAddress);
+        console.log("Contract LINK balance:", ethers.formatUnits(balance, 18));
+
+    } catch (e) {
+        console.error("Error reading from contract:", e);
+    }
 }
 
-main().catch((error) => {
-    console.error(error);
-    process.exitCode = 1;
-});
+main().catch(console.error);

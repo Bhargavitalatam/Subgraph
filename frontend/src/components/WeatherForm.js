@@ -11,14 +11,15 @@ function WeatherForm({ contract, account }) {
         if (!city) return;
 
         setLoading(true);
-        setStatus('Requesting weather for ' + city + '...');
         try {
-            const tx = await contract.requestWeather(city, {
-                value: ethers.parseEther(process.env.REACT_APP_WEATHER_ORACLE_FEE || "0.01") // Send required fee (v6 syntax)
-            });
+            // Generate some realistic dummy weather data
+            const temp = Math.floor(Math.random() * 30) + 5; // 5C to 35C
+            const desc = ["Sunny", "Cloudy", "Rainy", "Partly Cloudy"][Math.floor(Math.random() * 4)];
+
+            const tx = await contract.simulateWeatherReport(city, temp, desc);
             setStatus('Transaction sent: ' + tx.hash);
             await tx.wait();
-            setStatus('Weather requested successfully! Wait for oracle fulfillment.');
+            setStatus('Weather reported successfully (Free Demo Mode)!');
             setCity('');
         } catch (err) {
             console.error(err);
