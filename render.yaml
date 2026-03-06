@@ -7,7 +7,7 @@ services:
     staticPublishPath: frontend/build
     envVars:
       - key: REACT_APP_WEATHER_ORACLE_ADDRESS
-        value: 0xfE7FD5081f5B4b3De18882d6d01154AF1aA79114
+        value: 0x1146c30bc4FF9d13F902d7E5C3a3fd199dF04E9f
       - key: REACT_APP_SUBGRAPH_URI
         value: https://api.studio.thegraph.com/query/1743437/weather-oracle/version/latest
       - key: REACT_APP_WEATHER_ORACLE_FEE
