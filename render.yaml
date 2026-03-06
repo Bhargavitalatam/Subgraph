@@ -8,6 +8,6 @@ services:
       - key: REACT_APP_WEATHER_ORACLE_ADDRESS
         value: 0xfE7FD5081f5B4b3De18882d6d01154AF1aA79114
       - key: REACT_APP_SUBGRAPH_URI
-        value: https://api.thegraph.com/subgraphs/name/yourusername/weather-oracle
+        value: https://api.studio.thegraph.com/query/1743437/weather-oracle/version/latest
       - key: REACT_APP_WEATHER_ORACLE_FEE
         value: "0.01"
